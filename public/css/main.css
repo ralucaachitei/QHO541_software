@@ -95,3 +95,49 @@ body {
     border-color: transparent;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
   }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 0.9rem;
+  }
+  th.id-column, td.id-column {
+    width: 10%; 
+  }
+  
+  th.name-column, td.name -column {
+    width: 15%; 
+  }
+  th {
+    background-color: #f4f4f4;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  td.description {
+    max-width: 100px; /* Adjust as needed */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    margin-right: 5px;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .table {
+      display: block;
+      overflow-x: auto;
+    }
+  }

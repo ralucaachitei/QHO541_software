@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reviews List</title>
+
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ <!-- Local CSS -->
+ <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <h1>Reviews</h1>
+    <a href="/reviews/addReview">Add a New Review</a>
+    <ul>
+        <% reviews.forEach(review => { %>
+            <li>
+                <%= review.user_name %> - <%= review.rating %>/5
+                <a href="/reviews/<%= review._id %>">View</a>
+                <a href="/reviews/edit/<%= review._id %>">Edit</a>
+                <form action="/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>

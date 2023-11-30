@@ -1,156 +1,85 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Dashboard</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group me-2">
-        <a href="/addProduct" class="btn btn-sm btn-outline-secondary">+ New Product</a>
-      </div>
-      <div class="btn-group me-2">
-        <a href="/addReview" class="btn btn-sm btn-outline-secondary">+ New Review</a>
-      </div>
-    </div>
-  </div>
-  
-  <% messages.forEach(element => { %>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-      <%= element %>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  <% }) %>
-  
-  <div class="table-responsive">
-  
-   
-  
-  </div>
-  
-  <!-- New section for Products -->
-  <div class="my-4">
-    <h2 class="h4">Products</h2>
-    <div class="table-responsive">
-      <table class="table table-striped table-sm">
-        <thead>
-          <tr>
-            <th scope="col">Product ID</th>
-            <th scope="col">Product Name</th>
-            <th scope="col">Category</th>
-            <th scope="col">Price</th>
-            <th scope="col">Rating</th>
-            <th scope="col">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% products.forEach(product => { %>
-            <tr>
-              <td><%= product.product_id %></td>
-              <td><%= product.product_name %></td>
-              <td><%= product.category %></td>
-              <td><%= product.price %></td>
-              <td><%= product.rating %></td>
-              <td><%= product.description %></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  
-  <!-- New section for Reviews -->
-  <div class="my-4">
-    <h2 class="h4">Reviews</h2>
-    <div class="table-responsive">
-      <table class="table table-striped table-sm">
-        <thead>
-          <tr>
-            <th scope="col">Product ID</th>
-            <th scope="col">User Name</th>
-            <th scope="col">Rating</th>
-            <th scope="col">Review Title</th>
-            <th scope="col">Review Content</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% reviews.forEach(review => { %>
-            <tr>
-              <td><%= review.product_id %></td>
-              <td><%= review.user_name %></td>
-              <td><%= review.rating %></td>
-              <td><%= review.review_title %></td>
-              <td><%= review.review_content %></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  
-  <% if (products.length > 0) { %>
-    <nav aria-label="Dashboard Pagination">
-      <ul class="pagination justify-content-center mt-5">
-  
-        <% if (current == 1) { %>
-          <li class="page-item disabled"><a href="#" class="page-link">First</a></li>
-        <% } else { %>
-          <li class="page-item"><a href="/?page=1" class="page-link">First</a></li>
-        <% } %>
-  
-        <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
-        <% if(i !== 1) { %>
-          <li class="page-item disabled"><a href="#" class="page-link">...</a></li>
-        <% } %>
-  
-        <% for(; i <= (Number(current) + 4) && i <= pages; i++ ) { %>
-          <% if (i == current) { %>
-            <li class="page-item disabled"><a href="#" class="page-link"><%= i %></a></li>
-          <% } else { %>
-            <li class="page-item"><a href="/?page=<%= i %>" class="page-link"><%= i %></a></li>
-          <% } %>
-          <% if (i == Number(current) + 4 && i < pages) { %>
-            <li class="page-item disabled"><a href="#" class="page-link">...</a></li>
-          <% } %>
-        <% } %>
-  
-        <% if (current == pages) { %>
-          <li class="page-item disabled"><a href="#" class="page-link">Last</a></li>
-        <% } else { %>
-          <li class="page-item"><a href="/?page=<%= pages %>" class="page-link">Last</a></li>
-        <% } %>
-  
-      </ul>
-    </nav>
-  <% } %>
-  <% if (reviews.length > 0) { %>
-    <nav aria-label="Dashboard Pagination">
-      <ul class="pagination justify-content-center mt-5">
-  
-        <% if (current == 1) { %>
-          <li class="page-item disabled"><a href="#" class="page-link">First</a></li>
-        <% } else { %>
-          <li class="page-item"><a href="/?page=1" class="page-link">First</a></li>
-        <% } %>
-  
-        <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
-        <% if(i !== 1) { %>
-          <li class="page-item disabled"><a href="#" class="page-link">...</a></li>
-        <% } %>
-  
-        <% for(; i <= (Number(current) + 4) && i <= pages; i++ ) { %>
-          <% if (i == current) { %>
-            <li class="page-item disabled"><a href="#" class="page-link"><%= i %></a></li>
-          <% } else { %>
-            <li class="page-item"><a href="/?page=<%= i %>" class="page-link"><%= i %></a></li>
-          <% } %>
-          <% if (i == Number(current) + 4 && i < pages) { %>
-            <li class="page-item disabled"><a href="#" class="page-link">...</a></li>
-          <% } %>
-        <% } %>
-  
-        <% if (current == pages) { %>
-          <li class="page-item disabled"><a href="#" class="page-link">Last</a></li>
-        <% } else { %>
-          <li class="page-item"><a href="/?page=<%= pages %>" class="page-link">Last</a></li>
-        <% } %>
-  
-      </ul>
-    </nav>
-  <% } %>
-  
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <title>Amazon Best Products</title>
+
+    <link
+      rel="canonical"
+      href="https://getbootstrap.com/docs/4.5/examples/album/"
+    />
+
+    <!-- Bootstrap core CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="css/main.css" rel="stylesheet" />
+  </head>
+  <body>
+    <%- include('partials/header'); -%>
+
+    <main role="main">
+      <section class="jumbotron text-center">
+        <div class="container">
+          <h1>The Largest Collection of Amazon Products in the World</h1>
+          <p class="lead text-muted">Search, Explore and Favourite.</p>
+          <h2>
+            We have <strong><%= totalProducts %></strong> products,
+            with <strong><%= totalReviews %></strong> reviews,
+            spread across <strong><%= totalCategories %></strong> categories.
+          </h2>
+        </div>
+      </section>
+
+      <div class="album py-5 bg-light">
+        <div class="container">
+          <div class="row">
+            <% products.forEach(product => { %>
+              <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                  <% if (product.image) { %>
+                    <img src="<%= product.image %>" class="card-img-top" alt="<%= product.product_name %>">
+                  <% } else { %>
+                    <div class="card-img-top placeholder-img" style="background-color: #eee; height: 225px;">
+                      <span><%= product.product_name %></span>
+                    </div>
+                  <% } %>
+                  <div class="card-body">
+                    <h5 class="card-title"><%= product.product_name %></h5>
+                    <p class="card-text"><%= product.description %></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <small class="text-muted"><%= product.reviewCount %> Reviews</small>
+                      <button type="button" class="btn btn-sm btn-outline-primary">View</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>

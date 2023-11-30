@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Category</title>
+</head>
+<body>
+
+<h1>Edit Category</h1>
+
+<form method="POST" action="/categories/<%= category._id %>?_method=PUT">
+
+  <label>Name:</label>
+  <input type="text" name="name" value="<%= category.name %>" required>
+
+  <!-- Other fields -->
+
+  <button type="submit">Update Category</button>
+</form>
+
+<p>
+  <a href="/categories">Cancel</a>  
+</p>
+
+</body>
+</html>

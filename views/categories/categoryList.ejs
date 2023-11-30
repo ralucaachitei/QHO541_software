@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Categories</title>
+</head>
+<body>
+
+<h1>Categories</h1>
+
+<ul>
+  <% categories.forEach(function(cat) { %>
+    <li><%= cat.name %></li>
+  <% }); %>
+</ul>
+
+<form method="POST" action="/categories">
+  <label>Add Category:</label>
+  <input type="text" name="name">
+  <button type="submit">Add</button> 
+</form>
+
+</body>
+</html>

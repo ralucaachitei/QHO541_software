@@ -1,131 +1,122 @@
-require("dotenv").config();
-const express = require("express");
-const path = require("path");
-const mongoose = require("mongoose");
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const chalk = require("chalk");
-const bodyParser = require("body-parser");
-/*const morgan = require("morgan");*/
-const countriesModel = require("./models/Country");
-const expressSession = require("express-session");
-const User = require("./models/User");
-
-
-/**
- * Controllers (route handlers).
- */
-const tasterController = require("./controllers/taster");
-const tastingController = require("./controllers/tasting");
-const homeController = require("./controllers/home");
-const userController = require("./controllers/user");
-const tastingApiController = require("./controllers/api/tasting");
-const savedTastingApiController = require("./controllers/api/savedTasting");
-const savedTastingController = require("./controllers/savedTasting");
+const path = require('path');
+const session = require('express-session');
+require('dotenv').config();
 
 const app = express();
-app.set("view engine", "ejs");
-/*app.use(morgan('tiny'));*/
-/**
- * notice above we are using dotenv. We can now pull the values from our environment
- */
 
-const { PORT, MONGODB_URI } = process.env;
 
-/**
- * connect to database
- */
+// Import router
 
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
-mongoose.connection.on("error", (err) => {
-  console.error(err);
-  console.log(
-    "MongoDB connection error. Please make sure MongoDB is running.",
-    chalk.red("✗")
-  );
-  process.exit();
-});
+const productRouter
+ = require('./server/router/product');
+const reviewRouter
+ = require('./server/router/review');
+const categoryRouter
+ = require('./server/router/categories');
+const indexRouter
+ = require('./server/router/index');
+const userRouter
+ = require("./server/router/user");
 
-/***
- * We are applying our middlewear
- */
-app.use(express.static(path.join(__dirname, "public")));
+const User = require("./server/models/User");
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.error('Could not connect to MongoDB:', err));
+
+// EJS setup
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+// Body-parser middleware
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(expressSession({ secret: 'foo barr', cookie: { expires: new Date(253402300000000) } }))
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public')));
+// Session configuration
+app.use(session({
+    secret: 'raluca', 
+    resave: false,
+    saveUninitialized: true,
+    
+}));
 
-
-app.use("*", async (req, res, next) => {
-  global.user = false;
-  if (req.session.userID && !global.user) {
+app.use(async (req, res, next) => {
+    if (req.session.userID) {
+        try {
+            const user = await User.findById(req.session.userID);
+            res.locals.user = user; // Make user data available in all views
+        } catch (error) {
+            console.error("Error finding user:", error);
+        }
+    }
+    next();
+});
+  
+  const authMiddleware = async (req, res, next) => {
     const user = await User.findById(req.session.userID);
-    global.user = user;
+    if (!user) {
+      return res.redirect('/');
+    }
+    next()
   }
-  next();
-})
+  
+ 
+  
+  app.get("/logout", async (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            // handle error case...
+            console.error(err);
+            res.redirect('/');
+        } else {
+            res.redirect('/');
+        }
+    });
+});
+  
 
-const authMiddleware = async (req, res, next) => {
-  const user = await User.findById(req.session.userID);
-  if (!user) {
-    return res.redirect('/');
-  }
-  next()
-}
-
-app.get("/", homeController.list);
-
-app.get("/logout", async (req, res) => {
-  req.session.destroy();
-  global.user = false;
-  res.redirect('/');
-})
-
-app.get("/create-taster", authMiddleware, (req, res) => {
-  res.render("create-taster", { errors: {} });
+// Custom middleware to check for a special _method field in POST requests
+app.use((req, res, next) => {
+    if (req.method === 'POST' && req.body && typeof req.body === 'object' && '_method' in req.body) {
+        // Change the original method to the one specified in _method
+        req.method = req.body._method.toUpperCase();
+        delete req.body._method;
+    }
+    next();
 });
 
-app.post("/create-taster", tasterController.create);
+// Mount router
 
-app.get("/tasters", tasterController.list);
-app.get("/tasters/delete/:id", tasterController.delete);
-app.get("/tasters/update/:id", tasterController.edit);
-app.post("/tasters/update/:id", tasterController.update);
-
-
-
-app.get("/create-tasting", tastingController.createView);
-app.post("/create-tasting", tastingController.create);
-app.get("/update-tasting/:id", tastingController.edit);
-
-app.get("/search-tastings",(req,res) => {
-  res.render('search-tastings', tastingApiController);
+app.use('/product', productRouter
+);
+app.use('/review', reviewRouter
+);
+app.use('/categories', categoryRouter
+); 
+app.use('/', indexRouter);
+app.use('/user', userRouter);
+// Root route
+app.get('/', (req, res) => {
+    res.redirect('/index');
 });
 
-app.get("/saved-tastings", savedTastingController.list);
-
-app.get("/api/search-tastings", tastingApiController.list);
-app.post("/api/saved-tasting", savedTastingApiController.create);
-
-
-
-app.get("/tastings", tastingController.list);
-app.get("/tastings/delete/:id", tastingController.delete);
-
-app.get("api/tasting", )
-
-app.get("/join", (req, res) => {
-  res.render('create-user', { errors: {} })
+// 404 Error handler
+app.use((req, res, next) => {
+    res.status(404).render('404');
 });
 
-app.post("/join", userController.create);
-app.get("/login", (req, res) => {
-  res.render('login-user', { errors: {} })
+// Server start
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
-app.post("/login", userController.login);
 
-
-app.listen(PORT, () => {
-  console.log(
-    `Example app listening at http://localhost:${PORT}`,
-    chalk.green("✓")
-  );
-});
+module.exports = app;

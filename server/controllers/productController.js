@@ -1,6 +1,13 @@
 const Product = require('../models/Product');
 const mongoose = require('mongoose');
-
+exports.list = async (req, res) => {
+  try {
+      const products = await Product.find();
+      res.render('productList', { products }); // Ensure you have a 'productList' view
+  } catch (err) {
+      res.status(500).send(err.message);
+  }
+};
 /**
  * GET
  * Hompepage
@@ -52,7 +59,7 @@ exports.postProduct = async (req, res) => {
 
   try {
      
-    await Product.create(newProduct);
+    await newProduct.save();;
     res.redirect('/');
 
   } catch (error) {
