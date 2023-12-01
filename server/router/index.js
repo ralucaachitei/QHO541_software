@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
         const products = await Product.find(); // Fetch all products or a subset as required
 
         res.render('index', { 
-            products,         // Add this line to pass products array to the view
+            products,         //  pass products array to the view
             totalProducts, 
             totalReviews, 
             totalCategories,

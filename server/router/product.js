@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const Product = require('../models/Product'); // Adjust the path as per your project structure
+const Product = require('../models/Product'); 
 
 // GET all products with pagination
 router.get('/', async (req, res) => {
-    let { page, limit } = req.query; // Assuming you're passing these as query parameters
+    let { page, limit } = req.query; //  passing these as query parameters
 
     page = page ? parseInt(page, 10) : 1;
     limit = limit ? parseInt(limit, 10) : 10; // Default limit to 10 items per page
@@ -84,7 +84,7 @@ router.put('/:id', async (req, res) => {
       const { id } = req.params;
       const productUpdates = req.body;
   
-      // Assuming your Product model schema has fields that match the keys in productUpdates
+      //  Product model schema has fields that match the keys in productUpdates
       const product = await Product.findByIdAndUpdate(id, productUpdates, { new: true });
   
       if (!product) {

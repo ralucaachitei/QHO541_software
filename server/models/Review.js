@@ -5,7 +5,7 @@ const reviewSchema = new mongoose.Schema({
     product_id: {
         type: String,
         required: true,
-        ref: 'Product' // Assuming you have a Product model
+        ref: 'Product' 
     },
     user_name: {
         type: String,
@@ -19,7 +19,7 @@ const reviewSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-    // Add other fields as needed
+
 });
 
 module.exports = mongoose.model('Review', reviewSchema);

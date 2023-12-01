@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Category = require('../models/Category'); // Adjust the path as per your project structure
+const Category = require('../models/Category'); 
 
 // GET all categories
 router.get('/', async (req, res) => {
