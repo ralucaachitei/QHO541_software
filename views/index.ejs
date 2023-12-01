@@ -1,85 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta name="description" content="" />
-    <title>Amazon Best Products</title>
+<head>
+   <!-- Required meta tags -->
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <meta http-equiv="x-ua-compatible" content="ie=edge">
+   
+   <!-- Bootstrap CSS -->
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ 
+   <!-- Favicon for your site -->
+   <link rel="icon" type="image/png" href="/path-to-your/favicon.png">
+ 
+   <!-- SEO Meta Tags -->
+   <meta name="description" content="Explore the largest collection of Amazon products.">
+   <meta name="author" content="Your Name or Company Name">
+ 
+   <!-- Open Graph / Facebook Meta Tags -->
+   <meta property="og:type" content="website">
+   <meta property="og:url" content="https://yourwebsite.com/">
+   <meta property="og:title" content="The Largest Collection of Amazon Products in the World">
+   <meta property="og:description" content="Explore and discover a vast range of Amazon products.">
+   <meta property="og:image" content="https://yourwebsite.com/image.jpg">
+ 
+   <!-- Twitter Meta Tags -->
+   <meta property="twitter:card" content="summary_large_image">
+   <meta property="twitter:url" content="https://yourwebsite.com/">
+   <meta property="twitter:title" content="The Largest Collection of Amazon Products in the World">
+   <meta property="twitter:description" content="Explore and discover a vast range of Amazon products.">
+   <meta property="twitter:image" content="https://yourwebsite.com/image.jpg">
+ 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon Products Collection</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/public/css/main.css">
+</head>
+<body>
+  <!-- Navigation bar with login and register links -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <div class="container">
+      <a class="navbar-brand h1" href="/">The Largest Collection of Amazon Products in the World</a>
+      <div class="btn-toolbar">
+        <a href="/user" class="btn btn-outline-secondary mr-2">Login</a>
+        <a href="/create-user" class="btn btn-outline-secondary">Register</a>
+      </div>
+    </div>
+  </nav>
 
-    <link
-      rel="canonical"
-      href="https://getbootstrap.com/docs/4.5/examples/album/"
-    />
+  <!-- Main content section with a jumbotron for prominent display -->
+  <main role="main" class="container mt-4">
+    <section class="jumbotron text-center">
+      <div class="container">
+        <h1 class="jumbotron-heading">Discover Our Extensive Product Range</h1>
+        <p class="lead text-muted">Search, Explore and Favourite.</p>
+        <p>
+          We have <strong><%= totalProducts %></strong> products,
+          with <strong><%= totalReviews %></strong> reviews,
+          spread across <strong><%= totalCategories %></strong> categories.
+        </p>
+      </div>
+    </section>
 
-    <!-- Bootstrap core CSS -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-      crossorigin="anonymous"
-    />
+    <!-- Responsive table to display products -->
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Product ID</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% products.forEach(product => { %>
+            <tr>
+              <td><%= product.product_id %></td>
+              <td><%= product.product_name %></td>
+              <td>$<%= product.price %></td>
+              <td><%= product.rating %></td>
+              <td>
+                <a href="/viewProduct/<%= product._id %>" class="btn btn-warning btn-sm">
+                  View
+                </a>
+                <a href="/editProduct/<%= product._id %>" class="btn btn-primary btn-sm">
+                  Edit
+                </a>
+                <form action="/deleteProduct/<%= product._id %>" method="POST" class="d-inline">
+                  <button type="submit" class="btn btn-danger btn-sm">
+                    Delete
+                  </button>
+                </form>
+              </td> 
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
 
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
-    <!-- Custom styles for this template -->
-    <link href="css/main.css" rel="stylesheet" />
-  </head>
-  <body>
-    <%- include('partials/header'); -%>
-
-    <main role="main">
-      <section class="jumbotron text-center">
-        <div class="container">
-          <h1>The Largest Collection of Amazon Products in the World</h1>
-          <p class="lead text-muted">Search, Explore and Favourite.</p>
-          <h2>
-            We have <strong><%= totalProducts %></strong> products,
-            with <strong><%= totalReviews %></strong> reviews,
-            spread across <strong><%= totalCategories %></strong> categories.
-          </h2>
-        </div>
-      </section>
-
-      <div class="album py-5 bg-light">
-        <div class="container">
-          <div class="row">
-            <% products.forEach(product => { %>
-              <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                  <% if (product.image) { %>
-                    <img src="<%= product.image %>" class="card-img-top" alt="<%= product.product_name %>">
-                  <% } else { %>
-                    <div class="card-img-top placeholder-img" style="background-color: #eee; height: 225px;">
-                      <span><%= product.product_name %></span>
-                    </div>
-                  <% } %>
-                  <div class="card-body">
-                    <h5 class="card-title"><%= product.product_name %></h5>
-                    <p class="card-text"><%= product.description %></p>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <small class="text-muted"><%= product.reviewCount %> Reviews</small>
-                      <button type="button" class="btn btn-sm btn-outline-primary">View</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            <% }) %>
-          </div>
-        </div>
+  <!-- Include Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

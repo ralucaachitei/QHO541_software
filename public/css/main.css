@@ -141,3 +141,20 @@ body {
       overflow-x: auto;
     }
   }
+  .card {
+    height: 400px; 
+  }
+  
+  .card-body {
+    height: 150px; 
+  }
+  .card-title, .card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (max-width: 768px) {
+    .card {
+      height: auto; /* Cards can be taller on smaller screens */
+    }
+  }
