@@ -44,23 +44,60 @@ router.get('/:id', async (req, res) => {
 router.get('/add', (req, res) => {
     res.render('product/addProduct');
 });
-// PUT to update a product
-router.put('/:id', getProduct, async (req, res) => {
-    if (req.body.name != null) {
-        res.product.name = req.body.name;
-    }
-    if (req.body.price != null) {
-        res.product.price = req.body.price;
-    }
-    // Update other fields as needed
-
+router.post('/addProduct', async (req, res) => {
     try {
-        const updatedProduct = await res.product.save();
-        res.json(updatedProduct);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
+        const newProduct = new Product({
+           
+            product_id: req.body.product_id,
+            product_name: req.body.product_name,
+            price: req.body.price,
+            rating: req.body.rating,
+            description: req.body.description,
+            categories: req.body.categories,
+            reviews: req.body.reviews
+           
+        });
+
+        await newProduct.save();
+        res.redirect('/product/addProduct'); // Redirect to products list or confirmation page
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error adding product.");
     }
 });
+
+// Display the edit page
+router.get('/edit/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).send('Product not found');
+    }
+    res.render('product/editProduct', { product: product }); 
+  } catch (error) {
+    res.status(500).send('Error retrieving product');
+  }
+});
+// Handle the edit submission
+router.put('/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const productUpdates = req.body;
+  
+      // Assuming your Product model schema has fields that match the keys in productUpdates
+      const product = await Product.findByIdAndUpdate(id, productUpdates, { new: true });
+  
+      if (!product) {
+        return res.status(404).send('Product not found');
+      }
+  
+      // Redirect to the updated product's page, or wherever is appropriate
+      res.redirect('/products/' + id);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Server error occurred while updating the product');
+    }
+  });
 
 // DELETE a product
 router.delete('/:id', getProduct, async (req, res) => {

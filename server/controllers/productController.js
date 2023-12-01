@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 exports.list = async (req, res) => {
   try {
       const products = await Product.find();
-      res.render('productList', { products }); // Ensure you have a 'productList' view
+      res.render('productList', { products }); 
   } catch (err) {
       res.status(500).send(err.message);
   }
@@ -36,7 +36,7 @@ const locals = {
         description: " Adding new Product" 
      }
     
-    res.render('product/add', locals);
+    res.render('product/addProduct', locals);
 
 }
 

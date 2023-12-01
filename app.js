@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const chalk = require("chalk");
 const path = require('path');
 const session = require('express-session');
+const methodOverride = require('method-override');
 require('dotenv').config();
 
 const app = express();
@@ -11,18 +12,14 @@ const app = express();
 
 // Import router
 
-const productRouter
- = require('./server/router/product');
-const reviewRouter
- = require('./server/router/review');
-const categoryRouter
- = require('./server/router/categories');
-const indexRouter
- = require('./server/router/index');
-const userRouter
- = require("./server/router/user");
+const productRouter = require('./server/router/product');
+const reviewRouter = require('./server/router/review');
+const categoryRouter = require('./server/router/categories');
+const indexRouter = require('./server/router/index');
+const userRouter = require("./server/router/user");
 
 const User = require("./server/models/User");
+const Product = require("./server/models/Product");
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
@@ -37,6 +34,8 @@ app.set('views', path.join(__dirname, 'views'));
 // Body-parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use(methodOverride('_method'));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -68,7 +67,18 @@ app.use(async (req, res, next) => {
     next()
   }
   
- 
+  app.delete('/product/:id', async (req, res) => {
+    try {
+      const result = await Product.deleteOne({ _id: req.params.id });
+      if (result.deletedCount === 0) {
+        return res.status(404).send("Product not found.");
+      }
+      res.redirect('/products');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error deleting the product.");
+    }
+  });
   
   app.get("/logout", async (req, res) => {
     req.session.destroy((err) => {

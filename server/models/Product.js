@@ -7,14 +7,9 @@ const productSchema = new mongoose.Schema({
   price: String,
   rating: String,
   description: String,
-  categories: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category'
-  }],
-  reviews: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Review'
-  }],
+  categories: String,
+  reviews: String
+ 
 });
 
 // Product Model

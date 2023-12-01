@@ -54,6 +54,8 @@
             <th>Price</th>
             <th>Rating</th>
             <th>Description</th>
+            <th>Category</th>
+            <th>Review</th>
 
         </tr>
     </thead>
@@ -65,6 +67,8 @@
                     <td>$<%= product.price %></td>
                     <td><%= product.rating %></td>
                     <td class="description"><%= product.description %></td>
+                    <td><%= product.category %></td>
+                    <td class="review"><%= product.review %></td>
                     <td>
                         <a href="/product/<%= product._id %>" class="btn btn-primary btn-sm">View</a>
                         <a href="/product/<%= product._id %>/edit" class="btn btn-secondary btn-sm">Edit</a>

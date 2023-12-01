@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details</title>
+    <title><%= product.name %> - Product Details</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css">    
 </head>
 <body>
-    <h1>Product Details</h1>
+    <div class="container mt-4">
+        <h1 class="display-4"><%= product.name %></h1>
+        <p class="lead"><strong>Product ID:</strong> $<%= product.product_id %></p>
 
-    <div class="product-details">
-        <h2><%= product.name %></h2>
-        <p><strong>Price:</strong> $<%= product.price %></p>
-        <!-- Add other product details here as needed -->
+        <p ><strong>Price:</strong> $<%= product.price %></p>
+        <p><strong>Rating:</strong> <%= product.rating %></p>
+        <p><strong>Description:</strong> <%= product.description %></p>
+        <p><strong>Category:</strong> <%= product.category %></p>
+        <p><strong>Review:</strong> <%= product.reviews %></p>
+
+        <a href="/" class="btn btn-primary">Back to Products</a>
     </div>
-
-    <a href="/products">Back to Products</a>
 </body>
 </html>
